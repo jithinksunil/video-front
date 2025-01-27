@@ -9,7 +9,6 @@ const SynchronizedVideoPlayer: React.FC = () => {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [seekSetterNew, setSeekSetterNew] = useState(0);
-  const [seekSetterOld, setSeekSetterOld] = useState(0);
 
   useEffect(() => {
     // Listen for control commands from the server
@@ -27,7 +26,8 @@ const SynchronizedVideoPlayer: React.FC = () => {
           setPlaying(false);
           break;
         case 'seek':
-          setSeekSetterNew(command.seekSetter);
+          console.log(Date.now());
+          setSeekSetterNew(Date.now());
           video.currentTime = command.time;
           setCurrentTime(command.time);
           break;
@@ -103,17 +103,17 @@ const SynchronizedVideoPlayer: React.FC = () => {
             onTimeUpdate={(e) => {
               setCurrentTime(videoRef.current?.currentTime || 0);
             }}
-            onPause={handlePause}
-            onPlay={handlePlay}
-            // onSeeked={(e) => {
-            //   if (seekSetterNew !== seekSetterOld)
-            //     if (videoRef.current) {
-            //       const time = videoRef.current.currentTime;
-            //       sendControl('seek', time);
-            //       setCurrentTime(time);
-            //       setSeekSetterOld(seekSetterNew);
-            //     }
-            // }}
+            onSeeked={() => {
+              console.log(Date.now());
+              
+              if (seekSetterNew + 1000 < Date.now() && videoRef.current) {
+                const time = videoRef.current.currentTime;
+                sendControl('seek', time);
+                setCurrentTime(time);
+              }
+            }}
+            // onPause={handlePause}
+            // onPlay={handlePlay}
           >
             Your browser does not support the video tag.
           </video>
