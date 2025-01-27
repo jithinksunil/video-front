@@ -128,23 +128,23 @@ const SynchronizedVideoPlayer: React.FC = () => {
               Your browser does not support the video tag.
             </video>
 
-            <button
-              onClick={playing ? handlePause : handlePlay}
-              className='px-4 py-2 text-white bg-blue-800 hover:bg-blue-600 w-[200px] rounded-full my-10'
-            >
-              {playing ? 'Pause' : 'Play'}
-            </button>
-            {/* <input
+            <input
               type='range'
               min='0'
               max={duration.toString()}
               value={currentTime}
               onChange={handleSeek}
-              className='w-64'
+              className='w-[90%]'
             />
             <span className='text-sm text-gray-600'>
               {Math.floor(currentTime)} / {Math.floor(duration)} seconds
-            </span> */}
+            </span>
+            <button
+              onClick={playing ? handlePause : handlePlay}
+              className='px-4 py-2 text-white bg-blue-800 hover:bg-blue-600 w-[200px] rounded-full mt-2 mb-10'
+            >
+              {playing ? 'Pause' : 'Play'}
+            </button>
           </div>
         ) : (
           <p>Select a video file to play</p>
