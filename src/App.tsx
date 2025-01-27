@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 
-const socket: Socket = io('http://localhost:3000'); // Replace with your backend URL
+const socket: Socket = io('https://vedio-back.onrender.com'); // Replace with your backend URL
 
 const SynchronizedVideoPlayer: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
