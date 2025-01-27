@@ -84,13 +84,22 @@ const SynchronizedVideoPlayer: React.FC = () => {
   };
 
   return (
-    <>
-      <div className='w-screen min-h-screen flex  flex-col items-center justify-center'>
-        {/* File Input */}
+    <div
+      className='bg-[url(/we.jpeg)] bg-cover '
+      style={{
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center',
+      }}
+    >
+      <div className='w-screen min-h-screen flex  flex-col items-center justify-center backdrop-blur-md'>
         {!videoFile ? (
           <>
             <h1 className='text-2xl font-bold my-4'>Me & Bu</h1>
-            <input type='file' onChange={handleFileChange} className='mb-4' />
+            <input
+              type='file'
+              onChange={handleFileChange}
+              className='mb-4 hover:cursor-pointer'
+            />
           </>
         ) : null}
 
@@ -140,7 +149,7 @@ const SynchronizedVideoPlayer: React.FC = () => {
           <p>Select a video file to play</p>
         )}
       </div>
-    </>
+    </div>
   );
 };
 
