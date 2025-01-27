@@ -105,15 +105,13 @@ const SynchronizedVideoPlayer: React.FC = () => {
             }}
             onSeeked={() => {
               console.log(Date.now());
-              
+
               if (seekSetterNew + 1000 < Date.now() && videoRef.current) {
                 const time = videoRef.current.currentTime;
                 sendControl('seek', time);
                 setCurrentTime(time);
               }
             }}
-            // onPause={handlePause}
-            // onPlay={handlePlay}
           >
             Your browser does not support the video tag.
           </video>
@@ -121,13 +119,6 @@ const SynchronizedVideoPlayer: React.FC = () => {
           <p>Select a video file to play</p>
         )}
       </div>
-      {/* <video
-        src='/We.Live.in.Time.2024.1080p.10bit.WEBRip.6CH.x265.HEVC-PSA.mkv' // Replace with your video URL
-        className='w-full shadow-lg'
-        onLoadedMetadata={handleLoadedMetadata}
-        onTimeUpdate={() => setCurrentTime(videoRef.current?.currentTime || 0)}
-        controls={false} // Disable native controls for a custom experience
-      ></video> */}
 
       <div className='flex items-center space-x-4'>
         <button
