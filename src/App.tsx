@@ -84,63 +84,52 @@ const SynchronizedVideoPlayer: React.FC = () => {
   };
 
   return (
-    <div className='flex flex-col items-center space-y-4'>
-      <div className='flex flex-col items-center justify-center h-screen bg-gray-100'>
-        <h1 className='text-2xl font-bold mb-4'>Simple Video Player</h1>
-
+    <>
+      <div className='w-screen min-h-screen flex  flex-col items-center justify-center'>
         {/* File Input */}
-        <input type='file' onChange={handleFileChange} className='mb-4' />
+        {!videoFile ? (
+          <>
+            <h1 className='text-2xl font-bold my-4'>Me & Bu</h1>
+            <input type='file' onChange={handleFileChange} className='mb-4' />
+          </>
+        ) : null}
 
-        {/* Video Player */}
         {videoFile ? (
-          <video
-            ref={videoRef}
-            src={videoFile}
-            controls
-            width='800'
-            className='rounded shadow-lg'
-            onLoadedMetadata={handleLoadedMetadata}
-            onTimeUpdate={(e) => {
-              setCurrentTime(videoRef.current?.currentTime || 0);
-            }}
-            onSeeked={() => {
-              console.log(Date.now());
+          <div className='bg-black w-full flex flex-col items-center'>
+            <video
+              ref={videoRef}
+              src={videoFile}
+              controls
+              className='shadow-lg w-full'
+              onLoadedMetadata={handleLoadedMetadata}
+              onTimeUpdate={(e) => {
+                setCurrentTime(videoRef.current?.currentTime || 0);
+              }}
+              onSeeked={() => {
+                console.log(Date.now());
 
-              if (seekSetterNew + 1000 < Date.now() && videoRef.current) {
-                const time = videoRef.current.currentTime;
-                sendControl('seek', time);
-                setCurrentTime(time);
-              }
-            }}
-          >
-            Your browser does not support the video tag.
-          </video>
+                if (seekSetterNew + 1000 < Date.now() && videoRef.current) {
+                  const time = videoRef.current.currentTime;
+                  sendControl('seek', time);
+                  setCurrentTime(time);
+                }
+              }}
+            >
+              Your browser does not support the video tag.
+            </video>
+
+            <button
+              onClick={playing ? handlePause : handlePlay}
+              className='px-4 py-2 text-white bg-blue-800 hover:bg-blue-600 w-[200px] rounded-full my-10'
+            >
+              {playing ? 'Pause' : 'Play'}
+            </button>
+          </div>
         ) : (
           <p>Select a video file to play</p>
         )}
       </div>
-
-      <div className='flex items-center space-x-4'>
-        <button
-          onClick={playing ? handlePause : handlePlay}
-          className='px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600'
-        >
-          {playing ? 'Pause' : 'Play'}
-        </button>
-
-        <input
-          type='range'
-          min='0'
-          max={duration.toString()}
-          value={currentTime}
-          onChange={handleSeek}
-          className='w-64'
-        />
-        <span className='text-sm text-gray-600'>
-          {Math.floor(currentTime)} / {Math.floor(duration)} seconds
-        </span>
-      </div>
-    </div>
+    </>
   );
 };
 
