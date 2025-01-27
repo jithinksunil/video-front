@@ -110,7 +110,7 @@ const SynchronizedVideoPlayer: React.FC = () => {
               <input
                 type='file'
                 onChange={handleFileChange}
-                className='mb-4 hover:cursor-pointer border '
+                className='mb-4 hover:cursor-pointer border max-w-[70vw]'
               />
             </div>
             <div className='flex flex-col items-center'>
@@ -118,7 +118,7 @@ const SynchronizedVideoPlayer: React.FC = () => {
               <input
                 type='file'
                 onChange={handleSubtitle}
-                className='mb-4 hover:cursor-pointer border'
+                className='mb-4 hover:cursor-pointer border max-w-[70vw]'
                 placeholder='Subtitle'
               />
             </div>
