@@ -105,15 +105,15 @@ const SynchronizedVideoPlayer: React.FC = () => {
             }}
             onPause={handlePause}
             onPlay={handlePlay}
-            onSeeked={(e) => {
-              if (seekSetterNew !== seekSetterOld)
-                if (videoRef.current) {
-                  const time = videoRef.current.currentTime;
-                  sendControl('seek', time);
-                  setCurrentTime(time);
-                  setSeekSetterOld(seekSetterNew);
-                }
-            }}
+            // onSeeked={(e) => {
+            //   if (seekSetterNew !== seekSetterOld)
+            //     if (videoRef.current) {
+            //       const time = videoRef.current.currentTime;
+            //       sendControl('seek', time);
+            //       setCurrentTime(time);
+            //       setSeekSetterOld(seekSetterNew);
+            //     }
+            // }}
           >
             Your browser does not support the video tag.
           </video>
