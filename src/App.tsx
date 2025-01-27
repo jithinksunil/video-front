@@ -171,10 +171,10 @@ const SynchronizedVideoPlayer: React.FC = () => {
               />
               Your browser does not support the video tag.
             </video>
-            <div className='flex gap-3 w-full px-10 items-center py-3 mb-5'>
+            <div className='flex gap-3 w-full px-3 md:px-10 items-center py-3 mb-5'>
               <button
                 onClick={playing ? handlePause : handlePlay}
-                className='px-10  text-white bg-blue-800 hover:bg-blue-600  rounded-full'
+                className='px-10  text-white bg-blue-800 hover:bg-blue-600  rounded-full text-sm md:text-base'
               >
                 {playing ? 'Pause' : 'Play'}
               </button>
@@ -186,9 +186,9 @@ const SynchronizedVideoPlayer: React.FC = () => {
                 onChange={handleSeek}
                 className='w-full'
               />
-              <span className='text-sm text-gray-600 whitespace-nowrap'>
+              {/* <span className='text-sm text-gray-600 whitespace-nowrap'>
                 {Math.floor(currentTime)} / {Math.floor(duration)} seconds
-              </span>
+              </span> */}
             </div>
           </div>
         ) : (
