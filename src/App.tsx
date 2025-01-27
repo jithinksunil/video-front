@@ -9,6 +9,7 @@ const SynchronizedVideoPlayer: React.FC = () => {
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [seekSetterNew, setSeekSetterNew] = useState(0);
+  const [showPlayer, setShowPlayer] = useState(false);
 
   useEffect(() => {
     // Listen for control commands from the server
@@ -75,12 +76,20 @@ const SynchronizedVideoPlayer: React.FC = () => {
     }
   };
   const [videoFile, setVideoFile] = useState<string | null>(null); // Store the video URL
+  const [subtitle, setSubtitle] = useState<string | null>(null); // Store the video URL
 
   // Handle file input change
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]; // Safely access the first file
     if (file) {
       setVideoFile(URL.createObjectURL(file)); // Create a temporary URL for the video file
+    }
+  };
+
+  const handleSubtitle = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]; // Safely access the first file
+    if (file) {
+      setSubtitle(URL.createObjectURL(file)); // Create a temporary URL for the video file
     }
   };
 
@@ -93,18 +102,38 @@ const SynchronizedVideoPlayer: React.FC = () => {
       }}
     >
       <div className='w-screen min-h-screen flex  flex-col items-center justify-center backdrop-blur-md'>
-        {!videoFile ? (
+        {!showPlayer ? (
           <>
             <h1 className='text-2xl font-bold my-4'>Me & Bu</h1>
-            <input
-              type='file'
-              onChange={handleFileChange}
-              className='mb-4 hover:cursor-pointer'
-            />
+            <div className='flex gap-3'>
+              <p className='w-14'>Video</p>
+              <input
+                type='file'
+                onChange={handleFileChange}
+                className='mb-4 hover:cursor-pointer'
+              />
+            </div>
+            <div className='flex gap-3'>
+              <p className='w-14'>Subtitle</p>
+              <input
+                type='file'
+                onChange={handleSubtitle}
+                className='mb-4 hover:cursor-pointer'
+                placeholder='Subtitle'
+              />
+            </div>
+            <button
+              onClick={() => {
+                if (videoFile) setShowPlayer(true);
+              }}
+              className='px-4 py-2 text-white bg-blue-800 hover:bg-blue-600 w-[200px] rounded-full mt-2 mb-10'
+            >
+              Start
+            </button>
           </>
         ) : null}
 
-        {videoFile ? (
+        {videoFile && showPlayer ? (
           <div className='bg-black w-full flex flex-col items-center'>
             <video
               ref={videoRef}
@@ -135,6 +164,11 @@ const SynchronizedVideoPlayer: React.FC = () => {
                 }
               }}
             >
+              <track
+                src={subtitle || undefined}
+                kind='subtitles'
+                label='English'
+              />
               Your browser does not support the video tag.
             </video>
 
@@ -157,7 +191,7 @@ const SynchronizedVideoPlayer: React.FC = () => {
             </button>
           </div>
         ) : (
-          <p>Select a video file to play</p>
+          <p></p>
         )}
       </div>
     </div>
