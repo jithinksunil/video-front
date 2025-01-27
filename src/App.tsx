@@ -106,6 +106,7 @@ const SynchronizedVideoPlayer: React.FC = () => {
         {videoFile ? (
           <div className='bg-black w-full flex flex-col items-center'>
             <video
+              id='myVideo'
               ref={videoRef}
               src={videoFile}
               controls

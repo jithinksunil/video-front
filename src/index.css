@@ -225,3 +225,12 @@ input[type='number']::-webkit-outer-spin-button {
 .spline-container .branding {
   display: none !important;
 }
+
+#myVideo::-webkit-media-controls-play-button {
+  display: none;
+}
+
+/* For Firefox */
+#myVideo::-moz-media-controls-play-button {
+  display: none;
+}
