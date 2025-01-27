@@ -20,6 +20,7 @@ const SynchronizedVideoPlayer: React.FC = () => {
       switch (command.type) {
         case 'play':
           setSeekSetterNew(Date.now());
+          video.currentTime = command.time;
           video.play();
           setPlaying(true);
           break;
@@ -49,9 +50,12 @@ const SynchronizedVideoPlayer: React.FC = () => {
   };
 
   const handlePlay = () => {
-    videoRef.current?.play();
-    sendControl('play');
-    setPlaying(true);
+    if (videoRef.current) {
+      const time = videoRef.current.currentTime;
+      videoRef.current?.play();
+      sendControl('play', time);
+      setPlaying(true);
+    }
   };
 
   const handlePause = () => {
@@ -159,8 +163,11 @@ const SynchronizedVideoPlayer: React.FC = () => {
               }}
               onPlay={() => {
                 if (seekSetterNew + 500 < Date.now()) {
-                  sendControl('play');
-                  setPlaying(true);
+                  if (seekSetterNew + 500 < Date.now() && videoRef.current) {
+                    const time = videoRef.current.currentTime;
+                    sendControl('play', time);
+                    setPlaying(true);
+                  }
                 }
               }}
             >
@@ -178,6 +185,7 @@ const SynchronizedVideoPlayer: React.FC = () => {
               >
                 {playing ? 'Pause' : 'Play'}
               </button>
+
               <input
                 type='range'
                 min='0'
