@@ -116,20 +116,20 @@ const SynchronizedVideoPlayer: React.FC = () => {
                 setCurrentTime(videoRef.current?.currentTime || 0);
               }}
               onSeeked={() => {
-                if (seekSetterNew + 1000 < Date.now() && videoRef.current) {
+                if (seekSetterNew + 500 < Date.now() && videoRef.current) {
                   const time = videoRef.current.currentTime;
                   sendControl('seek', time);
                   setCurrentTime(time);
                 }
               }}
               onPause={() => {
-                if (seekSetterNew + 1000 < Date.now()) {
+                if (seekSetterNew + 500 < Date.now()) {
                   sendControl('pause');
                   setPlaying(false);
                 }
               }}
               onPlay={() => {
-                if (seekSetterNew + 1000 < Date.now()) {
+                if (seekSetterNew + 500 < Date.now()) {
                   sendControl('play');
                   setPlaying(true);
                 }
