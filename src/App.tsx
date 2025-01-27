@@ -18,15 +18,16 @@ const SynchronizedVideoPlayer: React.FC = () => {
 
       switch (command.type) {
         case 'play':
+          setSeekSetterNew(Date.now());
           video.play();
           setPlaying(true);
           break;
         case 'pause':
+          setSeekSetterNew(Date.now());
           video.pause();
           setPlaying(false);
           break;
         case 'seek':
-          console.log(Date.now());
           setSeekSetterNew(Date.now());
           video.currentTime = command.time;
           setCurrentTime(command.time);
@@ -106,7 +107,6 @@ const SynchronizedVideoPlayer: React.FC = () => {
         {videoFile ? (
           <div className='bg-black w-full flex flex-col items-center'>
             <video
-              id='myVideo'
               ref={videoRef}
               src={videoFile}
               controls
@@ -116,12 +116,22 @@ const SynchronizedVideoPlayer: React.FC = () => {
                 setCurrentTime(videoRef.current?.currentTime || 0);
               }}
               onSeeked={() => {
-                console.log(Date.now());
-
                 if (seekSetterNew + 1000 < Date.now() && videoRef.current) {
                   const time = videoRef.current.currentTime;
                   sendControl('seek', time);
                   setCurrentTime(time);
+                }
+              }}
+              onPause={() => {
+                if (seekSetterNew + 1000 < Date.now()) {
+                  sendControl('pause');
+                  setPlaying(false);
+                }
+              }}
+              onPlay={() => {
+                if (seekSetterNew + 1000 < Date.now()) {
+                  sendControl('play');
+                  setPlaying(true);
                 }
               }}
             >
