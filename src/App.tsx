@@ -124,6 +124,17 @@ const SynchronizedVideoPlayer: React.FC = () => {
             >
               {playing ? 'Pause' : 'Play'}
             </button>
+            {/* <input
+              type='range'
+              min='0'
+              max={duration.toString()}
+              value={currentTime}
+              onChange={handleSeek}
+              className='w-64'
+            />
+            <span className='text-sm text-gray-600'>
+              {Math.floor(currentTime)} / {Math.floor(duration)} seconds
+            </span> */}
           </div>
         ) : (
           <p>Select a video file to play</p>
