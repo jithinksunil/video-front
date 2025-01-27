@@ -105,20 +105,20 @@ const SynchronizedVideoPlayer: React.FC = () => {
         {!showPlayer ? (
           <>
             <h1 className='text-2xl font-bold my-4'>Me & Bu</h1>
-            <div className='flex gap-3'>
-              <p className='w-14'>Video</p>
+            <div className='flex flex-col items-center'>
+              <p className='text-center'>Video</p>
               <input
                 type='file'
                 onChange={handleFileChange}
-                className='mb-4 hover:cursor-pointer'
+                className='mb-4 hover:cursor-pointer border '
               />
             </div>
-            <div className='flex gap-3'>
-              <p className='w-14'>Subtitle</p>
+            <div className='flex flex-col items-center'>
+              <p className='text-center'>Subtitle</p>
               <input
                 type='file'
                 onChange={handleSubtitle}
-                className='mb-4 hover:cursor-pointer'
+                className='mb-4 hover:cursor-pointer border'
                 placeholder='Subtitle'
               />
             </div>
@@ -178,7 +178,7 @@ const SynchronizedVideoPlayer: React.FC = () => {
               max={duration.toString()}
               value={currentTime}
               onChange={handleSeek}
-              className='w-[90%]'
+              className='w-[90%] '
             />
             <span className='text-sm text-gray-600'>
               {Math.floor(currentTime)} / {Math.floor(duration)} seconds
