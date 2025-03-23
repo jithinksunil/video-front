@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
-import { Player } from './Player';
 
 const socket: Socket = io('https://vedio-back.onrender.com'); // Replace with your backend URL
 
@@ -82,6 +81,7 @@ const SynchronizedVideoPlayer: React.FC = () => {
   };
   const [videoFile, setVideoFile] = useState<string | null>(null); // Store the video URL
   const [subtitle, setSubtitle] = useState<string | null>(null); // Store the video URL
+  const [url, setUrl] = useState<string>('');
 
   // Handle file input change
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -95,6 +95,13 @@ const SynchronizedVideoPlayer: React.FC = () => {
     const file = event.target.files?.[0]; // Safely access the first file
     if (file) {
       setSubtitle(URL.createObjectURL(file)); // Create a temporary URL for the video file
+    }
+  };
+
+  const handleEnterurl = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const url = event.target.value; // Safely access the first file
+    if (url) {
+      setUrl(url);
     }
   };
 
@@ -118,7 +125,7 @@ const SynchronizedVideoPlayer: React.FC = () => {
                 className='mb-4 hover:cursor-pointer border max-w-[70vw]'
               />
             </div>
-            <div className='flex flex-col items-center'>
+            {/* <div className='flex flex-col items-center'>
               <p className='text-center'>Subtitle</p>
               <input
                 type='file'
@@ -126,10 +133,19 @@ const SynchronizedVideoPlayer: React.FC = () => {
                 className='mb-4 hover:cursor-pointer border max-w-[70vw]'
                 placeholder='Subtitle'
               />
+            </div> */}
+            <div className='flex flex-col items-center'>
+              <p className='text-center'>Video URL</p>
+              <input
+                type='text'
+                onChange={handleEnterurl}
+                className='mb-4 hover:cursor-pointer border max-w-[70vw] px-4 w-full py-1 foucus:outline-none active:outline-none selected:outline-none rounded-md'
+                placeholder='Paster Video Url'
+              />
             </div>
             <button
               onClick={() => {
-                if (videoFile) setShowPlayer(true);
+                if (videoFile || url) setShowPlayer(true);
               }}
               className='px-4 py-2 text-white bg-blue-800 hover:bg-blue-600 w-[200px] rounded-full mt-2 mb-10'
             >
@@ -138,9 +154,47 @@ const SynchronizedVideoPlayer: React.FC = () => {
           </>
         ) : null}
 
-        {videoFile ? (
+        {(videoFile || url) && showPlayer ? (
           <div className='bg-black w-full flex flex-col items-center'>
-            <Player src={videoFile} />
+            <video
+              ref={videoRef}
+              src={videoFile || url}
+              controls
+              className='shadow-lg w-full'
+              onLoadedMetadata={handleLoadedMetadata}
+              onTimeUpdate={(e) => {
+                setCurrentTime(videoRef.current?.currentTime || 0);
+              }}
+              onSeeked={() => {
+                if (seekSetterNew + 500 < Date.now() && videoRef.current) {
+                  const time = videoRef.current.currentTime;
+                  sendControl('seek', time);
+                  setCurrentTime(time);
+                }
+              }}
+              onPause={() => {
+                if (seekSetterNew + 500 < Date.now()) {
+                  sendControl('pause');
+                  setPlaying(false);
+                }
+              }}
+              onPlay={() => {
+                if (seekSetterNew + 500 < Date.now()) {
+                  if (seekSetterNew + 500 < Date.now() && videoRef.current) {
+                    const time = videoRef.current.currentTime;
+                    sendControl('play', time);
+                    setPlaying(true);
+                  }
+                }
+              }}
+            >
+              <track
+                src={subtitle || undefined}
+                kind='subtitles'
+                label='English'
+              />
+              Your browser does not support the video tag.
+            </video>
             <div className='flex gap-3 w-full px-3 md:px-10 items-center py-3 mb-5'>
               <button
                 onClick={playing ? handlePause : handlePlay}
