@@ -33,11 +33,5 @@ export const Player = ({ src }: { src: string }) => {
     });
   };
 
-  return (
-    <>
-      <div>Rest of app here</div>
-      <VideoJS options={videoJsOptions} onReady={handlePlayerReady} />
-      <div>Rest of app here</div>
-    </>
-  );
+  return <VideoJS options={videoJsOptions} onReady={handlePlayerReady} />;
 };
