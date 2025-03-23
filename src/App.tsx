@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import ReactPlayer from 'react-player';
 import { io, Socket } from 'socket.io-client';
 
 const socket: Socket = io('https://vedio-back.onrender.com'); // Replace with your backend URL
@@ -139,45 +140,13 @@ const SynchronizedVideoPlayer: React.FC = () => {
 
         {videoFile && showPlayer ? (
           <div className='bg-black w-full flex flex-col items-center'>
-            <video
-              ref={videoRef}
-              src={videoFile}
-              controls
-              className='shadow-lg w-full'
-              onLoadedMetadata={handleLoadedMetadata}
-              onTimeUpdate={(e) => {
-                setCurrentTime(videoRef.current?.currentTime || 0);
-              }}
-              onSeeked={() => {
-                if (seekSetterNew + 500 < Date.now() && videoRef.current) {
-                  const time = videoRef.current.currentTime;
-                  sendControl('seek', time);
-                  setCurrentTime(time);
-                }
-              }}
-              onPause={() => {
-                if (seekSetterNew + 500 < Date.now()) {
-                  sendControl('pause');
-                  setPlaying(false);
-                }
-              }}
-              onPlay={() => {
-                if (seekSetterNew + 500 < Date.now()) {
-                  if (seekSetterNew + 500 < Date.now() && videoRef.current) {
-                    const time = videoRef.current.currentTime;
-                    sendControl('play', time);
-                    setPlaying(true);
-                  }
-                }
-              }}
-            >
-              <track
-                src={subtitle || undefined}
-                kind='subtitles'
-                label='English'
-              />
-              Your browser does not support the video tag.
-            </video>
+            <ReactPlayer
+              url={videoFile}
+              autoPlay={true}
+              controls={true}
+              width='1200'
+              height='auto'
+            />
             <div className='flex gap-3 w-full px-3 md:px-10 items-center py-3 mb-5'>
               <button
                 onClick={playing ? handlePause : handlePlay}
