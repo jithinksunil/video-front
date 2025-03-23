@@ -23,6 +23,10 @@ const SynchronizedVideoPlayer: React.FC = () => {
           video.currentTime = command.time;
           video.play();
           setPlaying(true);
+          if (!url) {
+            setShowPlayer(true);
+            setUrl(command.url);
+          }
           break;
         case 'pause':
           setSeekSetterNew(Date.now());
@@ -46,7 +50,7 @@ const SynchronizedVideoPlayer: React.FC = () => {
   }, []);
 
   const sendControl = (type: string, time?: number) => {
-    socket.emit('control', { type, time, seekSetter: Date.now() });
+    socket.emit('control', { type, time, seekSetter: Date.now(), url });
   };
 
   const handlePlay = () => {
