@@ -1,15 +1,43 @@
-import logo from './logo.svg';
-import React, { useRef, useEffect } from 'react';
-import ReactPlayer from 'react-player';
+import React from 'react';
+import VideoJS from './VideoJs';
+import videojs from 'video.js';
+import 'video.js/dist/video-js.css';
+// This imports the functional component from the previous sample.
 
-export const Player = () => {
+export const Player = ({ src }: { src: string }) => {
+  const playerRef = React.useRef<any>(null);
+
+  const videoJsOptions = {
+    autoplay: true,
+    controls: true,
+    responsive: true,
+    fluid: true,
+    sources: [
+      {
+        src,
+        type: 'video/mp4',
+      },
+    ],
+  };
+
+  const handlePlayerReady = (player: any) => {
+    playerRef.current = player;
+
+    // You can handle player events here, for example:
+    player.on('waiting', () => {
+      videojs.log('player is waiting');
+    });
+
+    player.on('dispose', () => {
+      videojs.log('player will dispose');
+    });
+  };
+
   return (
-    <ReactPlayer
-      url='https://video.gumlet.io/5f462c1561cf8a766464ffc4/61b8ac77b7e0439691e7c2af/1.m3u8'
-      autoPlay={true}
-      controls={true}
-      width='1200'
-      height='auto'
-    />
+    <>
+      <div>Rest of app here</div>
+      <VideoJS options={videoJsOptions} onReady={handlePlayerReady} />
+      <div>Rest of app here</div>
+    </>
   );
 };

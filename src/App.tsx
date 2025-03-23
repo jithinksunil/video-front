@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import ReactPlayer from 'react-player';
 import { io, Socket } from 'socket.io-client';
+import { Player } from './Player';
 
 const socket: Socket = io('https://vedio-back.onrender.com'); // Replace with your backend URL
 
@@ -138,15 +138,9 @@ const SynchronizedVideoPlayer: React.FC = () => {
           </>
         ) : null}
 
-        {videoFile && showPlayer ? (
+        {videoFile ? (
           <div className='bg-black w-full flex flex-col items-center'>
-            <ReactPlayer
-              url={videoFile}
-              autoPlay={true}
-              controls={true}
-              width='1200'
-              height='auto'
-            />
+            <Player src={videoFile} />
             <div className='flex gap-3 w-full px-3 md:px-10 items-center py-3 mb-5'>
               <button
                 onClick={playing ? handlePause : handlePlay}
