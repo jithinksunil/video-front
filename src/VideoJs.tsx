@@ -37,6 +37,7 @@ export const VideoJS = (props:any) => {
     const player = playerRef.current;
 
     return () => {
+        
       if (player && !player.isDisposed()) {
         player.dispose();
         playerRef.current = null;
