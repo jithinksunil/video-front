@@ -108,6 +108,19 @@ const SynchronizedVideoPlayer: React.FC = () => {
       setUrl(url);
     }
   };
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const toggleFullscreen = () => {
+    const container = containerRef.current;
+
+    if (!document.fullscreenElement && container) {
+      container.requestFullscreen();
+      setIsFullscreen(true);
+    } else if (document.fullscreenElement) {
+      document.exitFullscreen();
+      setIsFullscreen(false);
+    }
+  };
 
   return (
     <div
@@ -159,11 +172,13 @@ const SynchronizedVideoPlayer: React.FC = () => {
         ) : null}
 
         {(videoFile || url) && showPlayer ? (
-          <div className='bg-black w-full flex flex-col items-center'>
+          <div
+            className='bg-black w-full flex flex-col items-center h-screen justify-center relative overflow-hidden'
+            ref={containerRef}
+          >
             <video
               ref={videoRef}
               src={videoFile || url}
-              controls
               className='shadow-lg w-full'
               onLoadedMetadata={handleLoadedMetadata}
               onTimeUpdate={(e) => {
@@ -199,25 +214,35 @@ const SynchronizedVideoPlayer: React.FC = () => {
               />
               Your browser does not support the video tag.
             </video>
-            <div className='flex gap-3 w-full px-3 md:px-10 items-center py-3 mb-5'>
-              <button
-                onClick={playing ? handlePause : handlePlay}
-                className='px-10  text-white bg-blue-800 hover:bg-blue-600  rounded-full text-sm md:text-base'
+            <div className='absolute bottom-0 w-full h-1/3 group'>
+              <div
+                className={`flex gap-3 w-full px-3 pb-6 md:px-10 items-center absolute -bottom-16 group-hover:bottom-0 opacity-50 group-hover:opacity-100 duration-300 ease-in-out`}
               >
-                {playing ? 'Pause' : 'Play'}
-              </button>
+                <button
+                  onClick={playing ? handlePause : handlePlay}
+                  className='px-10 text-white bg-blue-800 hover:bg-blue-600  rounded-full text-sm md:text-base'
+                >
+                  {playing ? 'Pause' : 'Play'}
+                </button>
 
-              <input
-                type='range'
-                min='0'
-                max={duration.toString()}
-                value={currentTime}
-                onChange={handleSeek}
-                className='w-full'
-              />
-              {/* <span className='text-sm text-gray-600 whitespace-nowrap'>
+                <input
+                  type='range'
+                  min='0'
+                  max={duration.toString()}
+                  value={currentTime}
+                  onChange={handleSeek}
+                  className='w-full'
+                />
+                <button
+                  onClick={toggleFullscreen}
+                  className='px-10  text-white bg-blue-800 hover:bg-blue-600  rounded-full text-sm md:text-base whitespace-nowrap'
+                >
+                  {isFullscreen ? '] [' : '[ ]'}
+                </button>
+                {/* <span className='text-sm text-gray-600 whitespace-nowrap'>
                 {Math.floor(currentTime)} / {Math.floor(duration)} seconds
               </span> */}
+              </div>
             </div>
           </div>
         ) : (
