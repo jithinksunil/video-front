@@ -218,7 +218,7 @@ const SynchronizedVideoPlayer: React.FC = () => {
               />
               Your browser does not support the video tag.
             </video>
-            <div className='absolute bottom-0 w-full h-1/3 group'>
+            <div className='absolute bottom-0 w-full h-2/3 group'>
               <div
                 className={`flex gap-3 w-full px-3 pb-6 md:px-10 items-center absolute -bottom-16 group-hover:bottom-0 opacity-50 group-hover:opacity-100 duration-300 ease-in-out`}
               >
