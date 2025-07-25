@@ -8,8 +8,8 @@ const SynchronizedVideoPlayer: React.FC = () => {
   const [playing, setPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [seekSetterNew, setSeekSetterNew] = useState(0);
   const [showPlayer, setShowPlayer] = useState(false);
+  const seekSetter = useRef(0);
 
   useEffect(() => {
     // Listen for control commands from the server
@@ -19,7 +19,7 @@ const SynchronizedVideoPlayer: React.FC = () => {
 
       switch (command.type) {
         case 'play':
-          setSeekSetterNew(Date.now());
+          seekSetter.current = Date.now();
           video.currentTime = command.time;
           video.play();
           setPlaying(true);
@@ -29,12 +29,12 @@ const SynchronizedVideoPlayer: React.FC = () => {
           }
           break;
         case 'pause':
-          setSeekSetterNew(Date.now());
+          seekSetter.current = Date.now();
           video.pause();
           setPlaying(false);
           break;
         case 'seek':
-          setSeekSetterNew(Date.now());
+          seekSetter.current = Date.now();
           video.currentTime = command.time;
           setCurrentTime(command.time);
           break;
@@ -185,23 +185,29 @@ const SynchronizedVideoPlayer: React.FC = () => {
                 setCurrentTime(videoRef.current?.currentTime || 0);
               }}
               onSeeked={() => {
-                if (seekSetterNew + 1000 < Date.now() && videoRef.current) {
+                if (
+                  seekSetter.current + 1000 < Date.now() &&
+                  videoRef.current
+                ) {
                   const time = videoRef.current.currentTime;
                   sendControl('seek', time);
                   setCurrentTime(time);
                 }
               }}
               onPause={() => {
-                if (seekSetterNew + 1000 < Date.now()) {
+                if (seekSetter.current + 1000 < Date.now()) {
                   sendControl('pause');
                   setPlaying(false);
                 }
               }}
               onPlay={() => {
-                if (seekSetterNew + 1000 < Date.now() && videoRef.current) {
-                    const time = videoRef.current.currentTime;
-                    sendControl('play', time);
-                    setPlaying(true);
+                if (
+                  seekSetter.current + 1000 < Date.now() &&
+                  videoRef.current
+                ) {
+                  const time = videoRef.current.currentTime;
+                  sendControl('play', time);
+                  setPlaying(true);
                 }
               }}
             >
