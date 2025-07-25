@@ -177,7 +177,6 @@ const SynchronizedVideoPlayer: React.FC = () => {
             ref={containerRef}
           >
             <video
-              playsInline
               ref={videoRef}
               src={videoFile || url}
               className='shadow-lg w-full'
